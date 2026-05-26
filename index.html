@@ -207,9 +207,8 @@
             font-size: 20px;
         }
 
-        /* --- SỬA ĐỔI: TỐI ƯU HIỂN THỊ VỪA KHÍT 7 DÒNG --- */
+        /* --- TỐI ƯU HIỂN THỊ VỪA KHÍT 7 DÒNG --- */
         .table-container {
-            /* Tiêu đề (43px) + 7 dòng dữ liệu (7 * 43px = 301px) = Tổng cộng 344px */
             height: 344px;
             overflow-y: auto;
             border: 1px solid var(--border-color);
@@ -227,7 +226,6 @@
         td {
             padding: 12px 16px;
             line-height: 19px;
-            /* Khóa cứng chiều cao text để tính toán chính xác */
             border-bottom: 1px solid var(--border-color);
             font-size: 14px;
             box-sizing: border-box;
@@ -236,7 +234,6 @@
             white-space: nowrap;
         }
 
-        /* Thiết lập độ rộng đồng bộ cho cả 2 Tab bảng */
         th:nth-child(1),
         td:nth-child(1) {
             width: 25%;
@@ -377,7 +374,6 @@
                 font-size: 15px;
             }
 
-            /* Tối ưu cố định chiều cao bảng trên mobile (Tiêu đề 38px + 7 dòng * 38px = 304px) */
             th,
             td {
                 padding: 10px 6px;
@@ -422,8 +418,7 @@
         <div id="focus-sheet" class="tab-content active">
             <div class="navigation-box">
                 <button class="nav-btn" onclick="changeCenterDate(-1)">◀ Ngày trước</button>
-                <button class="nav-btn" style="background: #ebf8ff; color: #2b6cb0;" onclick="resetToToday()">Hiện
-                    tại</button>
+                <button class="nav-btn" style="background: #ebf8ff; color: #2b6cb0;" onclick="resetToToday()">Hiện tại</button>
                 <button class="nav-btn" onclick="changeCenterDate(1)">Ngày sau ▶</button>
             </div>
             <div class="timeline" id="timelineContainer"></div>
@@ -463,7 +458,7 @@
     </div>
 
     <script>
-        // Danh sách thành viên
+        // Danh sách 10 thành viên xoay tua chính
         const members = [
             "Võ Nguyễn Thanh Tú",
             "Trương Vĩnh Thuận",
@@ -477,68 +472,93 @@
             "Nguyễn Dương Chí Tâm"
         ];
 
-        // Ngày gốc cố định thuật toán: 25/05/2026 (Thứ Hai)
+        // Chia 2 tốp chạy từ Thứ 2 đến Thứ 6 xen kẽ nhau từng tuần
+        const team1 = ["Võ Nguyễn Thanh Tú", "Trương Vĩnh Thuận", "Tăng Hồng Vủ Bảo", "Phạm Việt Huy - Lê Thị Bích Vân", "Nguyễn Lê Thái Hiền"];
+        const team2 = ["Trần Trung Bắc", "Nguyễn Văn Huy", "Phạm Huy Hùng", "Nguyễn Phúc Khang", "Nguyễn Dương Chí Tâm"];
+
+        // Ngày gốc cố định thuật toán: 25/05/2026 (Thứ Hai) - Quy ước là Tuần của Tốp 1
         const BASE_DATE = new Date(2026, 4, 25);
         let centerDate = new Date();
-
-        // Biến ngày chạy độc lập để render dữ liệu vô hạn cho 2 sheet lớn
-        let weekdayCurrentDate = new Date(2026, 4, 26);
-        let weekendCurrentDate = new Date(2026, 4, 26);
 
         const daysOfWeek = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
         const realTodayStr = new Date().toDateString();
 
-        // Thuật toán lõi: Tính chính xác ai trực vào một ngày bất kỳ (Xoay tua riêng biệt Trong tuần / Cuối tuần)
+        // Hàm phụ trợ: Lấy ngày Thứ Hai đầu tuần của một ngày bất kỳ
+        function getStartOfWeek(date) {
+            let d = new Date(date);
+            let day = d.getDay();
+            let diff = d.getDate() - day + (day === 0 ? -6 : 1); // Điều chỉnh nếu là CN
+            return new Date(d.setDate(diff));
+        }
+
+        // Khởi tạo ngày cho 2 bảng bắt đầu chính xác từ Thứ Hai của tuần hiện tại
+        let weekdayCurrentDate = getStartOfWeek(new Date());
+        let weekendCurrentDate = getStartOfWeek(new Date());
+
+        // THUẬT TOÁN LÕI TÍNH LỊCH TRỰC CHÍNH XÁC
         function getDutyForDate(targetDate) {
-            const diffTime = targetDate.getTime() - BASE_DATE.getTime();
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const startOfBaseWeek = getStartOfWeek(BASE_DATE);
+            const startOfTargetWeek = getStartOfWeek(targetDate);
+            const diffWeeks = Math.round((startOfTargetWeek - startOfBaseWeek) / (1000 * 60 * 60 * 24 * 7));
+            
+            if (diffWeeks < 0) return "Chưa cấu hình";
 
-            let weekdayCounter = 0;
-            let weekendCounter = 0;
-            let assignedPerson = "";
+            let wDay = targetDate.getDay();
 
-            if (diffDays >= 0) {
-                for (let i = 0; i <= diffDays; i++) {
-                    let checkDate = new Date(BASE_DATE);
-                    checkDate.setDate(BASE_DATE.getDate() + i);
-                    let wDay = checkDate.getDay();
-
-                    if (wDay === 0 || wDay === 6) {
-                        if (i === diffDays) {
-                            assignedPerson = members[weekendCounter % members.length];
-                        }
-                        weekendCounter++;
-                    } else {
-                        if (i === diffDays) {
-                            assignedPerson = members[weekdayCounter % members.length];
-                        }
-                        weekdayCounter++;
-                    }
-                }
-
-                // --- LOGIC ĐẶC BIỆT 1: XỬ LÝ THỨ BẢY DỰA VÀO THỨ NĂM TRƯỚC ĐÓ ---
-                if (targetDate.getDay() === 6) {
-                    let thursDate = new Date(targetDate);
-                    thursDate.setDate(targetDate.getDate() - 2);
-
-                    let thursPerson = getDutyForDate(thursDate);
-
-                    if (thursPerson && thursPerson.includes("Phạm Việt Huy - Lê Thị Bích Vân")) {
-                        assignedPerson = "Lê Thị Bích Vân";
-                    }
-                }
-
-                // --- LOGIC ĐẶC BIỆT 2: NẾU CHỦ NHẬT LÀ HUY + VÂN THÌ CHỈ GIỮ LẠI ANH HUY ---
-                if (targetDate.getDay() === 0) {
-                    if (assignedPerson && assignedPerson.includes("Phạm Việt Huy - Lê Thị Bích Vân")) {
-                        assignedPerson = "Phạm Việt Huy";
-                    }
-                }
-
-            } else {
-                return "Chưa cấu hình";
+            // --- TRƯỜNG HỢP TRONG TUẦN (THỨ 2 - THỨ 6) ---
+            if (wDay !== 0 && wDay !== 6) {
+                let currentTeam = (diffWeeks % 2 === 0) ? team1 : team2;
+                let memberIndex = wDay - 1; 
+                return currentTeam[memberIndex];
             }
-            return assignedPerson;
+
+            // --- TRƯỜNG HỢP CUỐI TUẦN (THỨ 7 & CHỦ NHẬT) ---
+            let totalWeekendDaysCount = 0;
+            let currentLoopDate = new Date(startOfBaseWeek);
+            
+            while (currentLoopDate <= targetDate) {
+                let loopDay = currentLoopDate.getDay();
+                if (loopDay === 0 || loopDay === 6) {
+                    
+                    if (currentLoopDate.toDateString() === targetDate.toDateString()) {
+                        // 1. Nếu là Thứ 7
+                        if (loopDay === 6) {
+                            let thursDate = new Date(currentLoopDate);
+                            thursDate.setDate(currentLoopDate.getDate() - 2);
+                            let thursPerson = getDutyForDate(thursDate);
+
+                            if (thursPerson && thursPerson.includes("Phạm Việt Huy")) {
+                                return "Lê Thị Bích Vân";
+                            }
+                        }
+                        
+                        // Lấy người trực từ danh sách xoay tua 10 người
+                        let assignedPerson = members[totalWeekendDaysCount % members.length];
+                        
+                        // LOGIC MỚI: Nếu là Chủ Nhật và trúng cặp Huy - Vân thì chỉ hiện Phạm Việt Huy
+                        if (loopDay === 0 && assignedPerson === "Phạm Việt Huy - Lê Thị Bích Vân") {
+                            return "Phạm Việt Huy";
+                        }
+                        
+                        return assignedPerson;
+                    }
+
+                    if (loopDay === 6) {
+                        let thursDate = new Date(currentLoopDate);
+                        thursDate.setDate(currentLoopDate.getDate() - 2);
+                        let thursPerson = getDutyForDate(thursDate);
+                        
+                        if (!(thursPerson && thursPerson.includes("Phạm Việt Huy"))) {
+                            totalWeekendDaysCount++;
+                        }
+                    } else {
+                        totalWeekendDaysCount++;
+                    }
+                }
+                currentLoopDate.setDate(currentLoopDate.getDate() + 1);
+            }
+
+            return "Chưa cấu hình";
         }
 
         // --- RENDER SHEET 1: FOCUS 3 NGÀY ---
@@ -559,12 +579,10 @@
                 if (isWeekend) card.classList.add('weekend');
                 if (offset === 0 && d.toDateString() === realTodayStr) card.classList.add('today');
 
-                let relativeLabel = "";
-
                 card.innerHTML = `
                 <div class="day-info">
                     ${daysOfWeek[d.getDay()]}
-                    <span>${d.toLocaleDateString('vi-VN')}${relativeLabel}</span>
+                    <span>${d.toLocaleDateString('vi-VN')}</span>
                 </div>
                 <div class="duty-info">
                     <div class="duty-label">${isWeekend ? 'Trực Cuối Tuần (Đầu Ngày)' : 'Trực Trong Tuần (Sáng & Chiều)'}</div>
@@ -575,7 +593,7 @@
             });
         }
 
-        // --- RENDER SHEET 2: FULL LỊCH THỨ 2 - THỨ 6 (Bỏ qua T7, CN) ---
+        // --- RENDER SHEET 2: FULL LỊCH THỨ 2 - THỨ 6 ---
         function renderWeekdaySheet(daysToGenerate) {
             const tbody = document.getElementById('weekdayTableBody');
             let generatedCount = 0;
@@ -584,7 +602,7 @@
                 let loopDate = new Date(weekdayCurrentDate);
                 let wDay = loopDate.getDay();
 
-                if (wDay !== 0 && wDay !== 6) { // Chỉ lấy Thứ 2 đến Thứ 6
+                if (wDay !== 0 && wDay !== 6) {
                     const person = getDutyForDate(loopDate);
                     const row = document.createElement('tr');
                     if (loopDate.toDateString() === realTodayStr) row.className = 'table-today';
@@ -601,17 +619,16 @@
             }
         }
 
-        // --- RENDER SHEET 3: FULL LỊCH CUỐI TUẦN (Chỉ lấy T7, CN) ---
+        // --- RENDER SHEET 3: FULL LỊCH CUỐI TUẦN ---
         function renderWeekendSheet(daysToGenerate) {
-            const tbody = document.getElementById('weekdayTableBody');
-            const weekendTbody = document.getElementById('weekendTableBody') || tbody;
+            const weekendTbody = document.getElementById('weekendTableBody');
             let generatedCount = 0;
 
             while (generatedCount < daysToGenerate) {
                 let loopDate = new Date(weekendCurrentDate);
                 let wDay = loopDate.getDay();
 
-                if (wDay === 0 || wDay === 6) { // Chỉ lấy Thứ 7 và Chủ Nhật
+                if (wDay === 0 || wDay === 6) {
                     const person = getDutyForDate(loopDate);
                     const row = document.createElement('tr');
                     row.className = 'table-weekend';
@@ -629,7 +646,7 @@
             }
         }
 
-        // Hàm chuyển đổi tab mượt mà giữa các sheet
+        // Hàm chuyển đổi tab
         function switchTab(event, tabId) {
             document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -658,7 +675,7 @@
             }
         });
 
-        // Khới tạo nạp dữ liệu ban đầu cho các Sheet
+        // Khởi tạo nạp dữ liệu ban đầu
         renderThreeDays();
         renderWeekdaySheet(40);
         renderWeekendSheet(16); 

@@ -175,11 +175,11 @@
             border-left-color: #fef3c7;
         }
 
+        /* --- TAB 1: ĐỒNG BỘ ĐỀU NHAU, KHÔNG PHÓNG TO, KHÔNG TĂNG CỠ CHỮ --- */
         .day-card.today {
             background: #ffffff;
             border: 3px solid var(--focus-color);
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.18);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.12);
             position: relative;
         }
 
@@ -199,12 +199,6 @@
 
         .day-card.today .day-info {
             color: var(--focus-color);
-            font-size: 19px;
-        }
-
-        .day-card.today .duty-name {
-            color: #000;
-            font-size: 20px;
         }
 
         /* --- TỐI ƯU HIỂN THỊ VỪA KHÍT 7 DÒNG --- */
@@ -262,9 +256,14 @@
             color: var(--weekend-color);
         }
 
+        /* --- TAB 2 & 3: DÒNG HÔM NAY CHỮ THƯỜNG (KHÔNG BOLD), NỀN XANH NHẸ ĐỒNG ĐỀU --- */
         tr.table-today {
             background-color: #e8fbf0 !important;
-            font-weight: bold;
+            font-weight: normal !important; 
+        }
+        
+        tr.table-today td strong {
+            font-weight: normal !important;
         }
 
         .loading-text {
@@ -354,7 +353,6 @@
             }
 
             .day-card.today {
-                transform: none;
                 margin: 0;
                 border-width: 2px;
             }
@@ -364,14 +362,6 @@
                 top: -8px;
                 font-size: 8px;
                 padding: 1px 6px;
-            }
-
-            .day-card.today .day-info {
-                font-size: 14px;
-            }
-
-            .day-card.today .duty-name {
-                font-size: 15px;
             }
 
             th,
@@ -535,7 +525,7 @@
                         // Lấy người trực từ danh sách xoay tua 10 người
                         let assignedPerson = members[totalWeekendDaysCount % members.length];
                         
-                        // LOGIC MỚI: Nếu là Chủ Nhật và trúng cặp Huy - Vân thì chỉ hiện Phạm Việt Huy
+                        // Nếu là Chủ Nhật và trúng cặp Huy - Vân thì chỉ hiện Phạm Việt Huy
                         if (loopDay === 0 && assignedPerson === "Phạm Việt Huy - Lê Thị Bích Vân") {
                             return "Phạm Việt Huy";
                         }
@@ -610,7 +600,7 @@
                     row.innerHTML = `
                     <td>${loopDate.toLocaleDateString('vi-VN')}</td>
                     <td>${daysOfWeek[wDay]}</td>
-                    <td><strong>${person}</strong></td>
+                    <td>${person}</td>
                 `;
                     tbody.appendChild(row);
                     generatedCount++;
@@ -637,7 +627,7 @@
                     row.innerHTML = `
                     <td>${loopDate.toLocaleDateString('vi-VN')}</td>
                     <td>${daysOfWeek[wDay]}</td>
-                    <td><strong>${person}</strong></td>
+                    <td>${person}</td>
                 `;
                     weekendTbody.appendChild(row);
                     generatedCount++;

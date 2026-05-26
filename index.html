@@ -501,7 +501,7 @@
             const startOfTargetWeek = getStartOfWeek(targetDate);
             const diffWeeks = Math.round((startOfTargetWeek - startOfBaseWeek) / (1000 * 60 * 60 * 24 * 7));
             
-            if (diffWeeks < 0) return "Chưa cấu hình";
+            if (diffWeeks < 0) return "Chưa có thông tin";
 
             let wDay = targetDate.getDay();
 
@@ -558,7 +558,7 @@
                 currentLoopDate.setDate(currentLoopDate.getDate() + 1);
             }
 
-            return "Chưa cấu hình";
+            return "Chưa có thông tin";
         }
 
         // --- RENDER SHEET 1: FOCUS 3 NGÀY ---

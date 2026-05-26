@@ -218,14 +218,40 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            text-align: center;
+            text-align: left;
+            table-layout: fixed;
+            /* Khóa cố định layout để tuân thủ chính xác width % */
         }
 
         th,
         td {
-            padding: 12px;
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border-color);
             font-size: 14px;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            /* Tránh vỡ dòng làm lệch hàng */
+        }
+
+        /* Thiết lập độ rộng đồng bộ cho cả 2 Tab bảng */
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 25%;
+            /* Cột Ngày */
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 20%;
+            /* Cột Thứ */
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 55%;
+            /* Cột Người trực */
         }
 
         th {
@@ -299,7 +325,6 @@
 
             .day-card.today {
                 transform: none;
-                /* Tránh scale bị lẹm viền trên màn hình nhỏ */
                 margin: 5px 0;
             }
 
@@ -313,11 +338,27 @@
                 font-size: 16px;
             }
 
-            /* Tối ưu bảng lịch dài */
+            /* Tối ưu bảng lịch dài khi xem trên mobile */
             th,
             td {
-                padding: 10px 4px;
+                padding: 10px 6px;
                 font-size: 12px;
+            }
+
+            /* Tinh chỉnh lại tỷ lệ độ rộng trên Mobile để hiển thị tên rõ hơn */
+            th:nth-child(1),
+            td:nth-child(1) {
+                width: 28%;
+            }
+
+            th:nth-child(2),
+            td:nth-child(2) {
+                width: 22%;
+            }
+
+            th:nth-child(3),
+            td:nth-child(3) {
+                width: 50%;
             }
         }
     </style>
@@ -350,7 +391,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày dương</th>
+                            <th>Ngày</th>
                             <th>Thứ</th>
                             <th>Người trực (Cả Ngày)</th>
                         </tr>
@@ -366,7 +407,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày dương</th>
+                            <th>Ngày</th>
                             <th>Thứ</th>
                             <th>Người trực (Đầu Ngày)</th>
                         </tr>

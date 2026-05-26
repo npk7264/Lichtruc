@@ -277,7 +277,7 @@
                         <tr>
                             <th>Ngày dương lịch</th>
                             <th>Thứ</th>
-                            <th>Người trực (Cả ngày)</th>
+                            <th>Người trực (Cả Ngày)</th>
                         </tr>
                     </thead>
                     <tbody id="weekdayTableBody"></tbody>
@@ -306,16 +306,16 @@
     <script>
         // Danh sách thành viên
         const members = [
-"Võ Nguyễn Thanh Tú",
-"Trương Vĩnh Thuận",
-"Tăng Hồng Vủ Bảo",
-"Phạm Việt Huy - Lê Thị Bích Vân",
-"Nguyễn Lê Thái Hiền",            
-"Trần Trung Bắc",
-"Nguyễn Văn Huy",
-"Phạm Huy Hùng",
-"Nguyễn Phúc Khang",
-"Nguyễn Dương Chí Tâm"
+            "Trương Vĩnh Thuận",
+            "Võ Nguyễn Thanh Tú",
+            "Tăng Hồng Vủ Bảo",
+            "Phạm Việt Huy - Lê Thị Bích Vân",
+            "Nguyễn Lê Thái Hiền",
+            "Trần Trung Bắc",
+            "Nguyễn Văn Huy",
+            "Phạm Huy Hùng",
+            "Nguyễn Phúc Khang",
+            "Nguyễn Dương Chí Tâm"
         ];
 
         // Ngày gốc cố định thuật toán: 25/05/2026 (Thứ Hai)
@@ -356,6 +356,26 @@
                         weekdayCounter++;
                     }
                 }
+
+                // --- LOGIC ĐẶC BIỆT 1: XỬ LÝ THỨ BẢY DỰA VÀO THỨ NĂM TRƯỚC ĐÓ ---
+                if (targetDate.getDay() === 6) {
+                    let thursDate = new Date(targetDate);
+                    thursDate.setDate(targetDate.getDate() - 2);
+
+                    let thursPerson = getDutyForDate(thursDate);
+
+                    if (thursPerson && thursPerson.includes("Phạm Việt Huy - Lê Thị Bích Vân")) {
+                        assignedPerson = "Lê Thị Bích Vân";
+                    }
+                }
+
+                // --- LOGIC ĐẶC BIỆT 2: NẾU CHỦ NHẬT LÀ HUY + VÂN THÌ CHỈ GIỮ LẠI ANH HUY ---
+                if (targetDate.getDay() === 0) {
+                    if (assignedPerson && assignedPerson.includes("Phạm Việt Huy - Lê Thị Bích Vân")) {
+                        assignedPerson = "Phạm Việt Huy";
+                    }
+                }
+
             } else {
                 return "Chưa cấu hình";
             }
@@ -390,7 +410,7 @@
                     <span>${d.toLocaleDateString('vi-VN')}${relativeLabel}</span>
                 </div>
                 <div class="duty-info">
-                    <div class="duty-label">${isWeekend ? 'Trực Cuối Tuần (Đầu ngày)' : 'Trực Trong Tuần (Sáng & Chiều)'}</div>
+                    <div class="duty-label">${isWeekend ? 'Trực Cuối Tuần (Cả Ngày)' : 'Trực Trong Tuần (Sáng & Chiều)'}</div>
                     <div class="duty-name">${person}</div>
                 </div>
             `;
@@ -426,7 +446,8 @@
 
         // --- RENDER SHEET 3: FULL LỊCH CUỐI TUẦN (Chỉ lấy T7, CN) ---
         function renderWeekendSheet(daysToGenerate) {
-            const tbody = document.getElementById('weekendTableBody');
+            const tbody = document.getElementById('weekdayTableBody');
+            const weekendTbody = document.getElementById('weekendTableBody') || tbody;
             let generatedCount = 0;
 
             while (generatedCount < daysToGenerate) {
@@ -444,7 +465,7 @@
                     <td>${daysOfWeek[wDay]}</td>
                     <td><strong>${person}</strong></td>
                 `;
-                    tbody.appendChild(row);
+                    weekendTbody.appendChild(row);
                     generatedCount++;
                 }
                 weekendCurrentDate.setDate(weekendCurrentDate.getDate() + 1);

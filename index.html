@@ -209,8 +209,7 @@
 
         /* --- STYLES CHO CÁC SHEET FULL TABLE --- */
         .table-container {
-            max-height: 350px;
-            /* Đã chỉnh sửa: Chiều cao chuẩn hiển thị đúng 7 dòng dữ liệu + header */
+            max-height: 360px;
             overflow-y: auto;
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -289,6 +288,15 @@
 
             h1 {
                 font-size: 20px;
+                margin-bottom: 2px;
+            }
+
+            .sub-title {
+                margin-bottom: 15px;
+            }
+
+            .tabs-menu {
+                margin-bottom: 15px;
             }
 
             .tab-link {
@@ -296,42 +304,79 @@
                 padding: 8px 2px;
             }
 
-            .nav-btn {
-                font-size: 11px;
-                padding: 8px 6px;
+            .navigation-box {
+                margin-bottom: 15px;
+                gap: 5px;
             }
 
-            /* Chuyển Day-card 3 ngày thành 1 cột dọc hẳn */
+            .nav-btn {
+                font-size: 11px;
+                padding: 6px 4px;
+            }
+
+            /* --- TỐI ƯU THU GỌN CHIỀU DÀI TAB HÔM NAY TRÊN MOBILE --- */
+            .timeline {
+                gap: 8px;
+                /* Giảm khoảng cách giữa các ô */
+            }
+
             .day-card {
-                grid-template-columns: 1fr;
+                grid-template-columns: 85px 1fr;
+                /* Giữ hiển thị 2 cột trái phải nhỏ gọn thay vì xuống dòng */
                 gap: 10px;
-                padding: 15px;
+                padding: 10px 12px;
+                /* Giảm mạnh padding để tiết kiệm chiều cao */
+            }
+
+            .day-info {
+                font-size: 13px;
+            }
+
+            .day-info span {
+                font-size: 11px;
+                margin-top: 2px;
             }
 
             .duty-info {
-                padding-left: 0;
-                padding-top: 10px;
-                border-left: none;
-                border-top: 2px solid #edf2f7;
+                padding-left: 10px;
+                padding-top: 0;
+                border-left: 2px solid #edf2f7;
+                border-top: none;
             }
 
             .day-card.weekend .duty-info {
-                border-top-color: #fef3c7;
+                border-left-color: #fef3c7;
+            }
+
+            .duty-label {
+                font-size: 9px;
+                margin-bottom: 1px;
+            }
+
+            .duty-name {
+                font-size: 14px;
             }
 
             .day-card.today {
                 transform: none;
-                margin: 5px 0;
+                margin: 0;
+                border-width: 2px;
+                /* Giảm độ dày viền xuống một chút cho thanh thoát */
             }
 
             .day-card.today::after {
-                right: 15px;
-                top: -10px;
-                font-size: 9px;
+                right: 10px;
+                top: -8px;
+                font-size: 8px;
+                padding: 1px 6px;
             }
 
-            .duty-name {
-                font-size: 16px;
+            .day-card.today .day-info {
+                font-size: 14px;
+            }
+
+            .day-card.today .duty-name {
+                font-size: 15px;
             }
 
             /* Tối ưu bảng lịch dài khi xem trên mobile */
@@ -341,7 +386,6 @@
                 font-size: 12px;
             }
 
-            /* Tinh chỉnh lại tỷ lệ độ rộng trên Mobile */
             th:nth-child(1),
             td:nth-child(1) {
                 width: 28%;
@@ -357,7 +401,6 @@
                 width: 50%;
             }
 
-            /* Điều chỉnh chiều cao khung cuộn trên mobile để khớp với font-size nhỏ hơn */
             .table-container {
                 max-height: 315px;
             }
@@ -392,7 +435,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày</th>
+                            <th>Ngày dương</th>
                             <th>Thứ</th>
                             <th>Người trực (Cả Ngày)</th>
                         </tr>
@@ -408,7 +451,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày</th>
+                            <th>Ngày dương</th>
                             <th>Thứ</th>
                             <th>Người trực (Đầu Ngày)</th>
                         </tr>

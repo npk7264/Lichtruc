@@ -209,7 +209,8 @@
 
         /* --- STYLES CHO CÁC SHEET FULL TABLE --- */
         .table-container {
-            max-height: 60vh;
+            max-height: 350px;
+            /* Đã chỉnh sửa: Chiều cao chuẩn hiển thị đúng 7 dòng dữ liệu + header */
             overflow-y: auto;
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -220,7 +221,6 @@
             border-collapse: collapse;
             text-align: left;
             table-layout: fixed;
-            /* Khóa cố định layout để tuân thủ chính xác width % */
         }
 
         th,
@@ -232,26 +232,22 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            /* Tránh vỡ dòng làm lệch hàng */
         }
 
         /* Thiết lập độ rộng đồng bộ cho cả 2 Tab bảng */
         th:nth-child(1),
         td:nth-child(1) {
             width: 25%;
-            /* Cột Ngày */
         }
 
         th:nth-child(2),
         td:nth-child(2) {
             width: 20%;
-            /* Cột Thứ */
         }
 
         th:nth-child(3),
         td:nth-child(3) {
             width: 55%;
-            /* Cột Người trực */
         }
 
         th {
@@ -345,7 +341,7 @@
                 font-size: 12px;
             }
 
-            /* Tinh chỉnh lại tỷ lệ độ rộng trên Mobile để hiển thị tên rõ hơn */
+            /* Tinh chỉnh lại tỷ lệ độ rộng trên Mobile */
             th:nth-child(1),
             td:nth-child(1) {
                 width: 28%;
@@ -359,6 +355,11 @@
             th:nth-child(3),
             td:nth-child(3) {
                 width: 50%;
+            }
+
+            /* Điều chỉnh chiều cao khung cuộn trên mobile để khớp với font-size nhỏ hơn */
+            .table-container {
+                max-height: 315px;
             }
         }
     </style>
@@ -391,7 +392,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày</th>
+                            <th>Ngày dương</th>
                             <th>Thứ</th>
                             <th>Người trực (Cả Ngày)</th>
                         </tr>
@@ -407,7 +408,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày</th>
+                            <th>Ngày dương</th>
                             <th>Thứ</th>
                             <th>Người trực (Đầu Ngày)</th>
                         </tr>

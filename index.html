@@ -453,7 +453,7 @@
             "Võ Nguyễn Thanh Tú",
             "Trương Vĩnh Thuận",
             "Tăng Hồng Vủ Bảo",
-            "Phạm Việt Huy - Lê Thị Bích Vân",
+            "Phạm Việt Huy - Bích Vân",
             "Nguyễn Lê Thái Hiền",
             "Trần Trung Bắc",
             "Nguyễn Văn Huy",
@@ -463,7 +463,7 @@
         ];
 
         // Chia 2 tốp chạy từ Thứ 2 đến Thứ 6 xen kẽ nhau từng tuần
-        const team1 = ["Võ Nguyễn Thanh Tú", "Trương Vĩnh Thuận", "Tăng Hồng Vủ Bảo", "Phạm Việt Huy - Lê Thị Bích Vân", "Nguyễn Lê Thái Hiền"];
+        const team1 = ["Võ Nguyễn Thanh Tú", "Trương Vĩnh Thuận", "Tăng Hồng Vủ Bảo", "Phạm Việt Huy - Bích Vân", "Nguyễn Lê Thái Hiền"];
         const team2 = ["Trần Trung Bắc", "Nguyễn Văn Huy", "Phạm Huy Hùng", "Nguyễn Phúc Khang", "Nguyễn Dương Chí Tâm"];
 
         // Ngày gốc cố định thuật toán: 25/05/2026 (Thứ Hai) - Quy ước là Tuần của Tốp 1
@@ -518,7 +518,7 @@
                             let thursPerson = getDutyForDate(thursDate);
 
                             if (thursPerson && thursPerson.includes("Phạm Việt Huy")) {
-                                return "Lê Thị Bích Vân";
+                                return "Bích Vân";
                             }
                         }
                         
@@ -526,7 +526,7 @@
                         let assignedPerson = members[totalWeekendDaysCount % members.length];
                         
                         // Nếu là Chủ Nhật và trúng cặp Huy - Vân thì chỉ hiện Phạm Việt Huy
-                        if (loopDay === 0 && assignedPerson === "Phạm Việt Huy - Lê Thị Bích Vân") {
+                        if (loopDay === 0 && assignedPerson === "Phạm Việt Huy - Bích Vân") {
                             return "Phạm Việt Huy";
                         }
                         

@@ -146,7 +146,6 @@
         .duty-info {
             padding-left: 20px;
             border-left: 2px solid #edf2f7;
-            overflow: hidden; /* Ẩn phần chữ tràn ra ngoài */
         }
 
         .duty-label {
@@ -157,35 +156,10 @@
             margin-bottom: 4px;
         }
 
-        /* --- CẤU HÌNH HIỆU ỨNG CHỮ CHẠY 1 LẦN RỒI DỪNG --- */
-        .marquee-box {
-            overflow: hidden;
-            display: flex;
-            width: 100%;
-        }
-
         .duty-name {
             font-size: 18px;
             font-weight: 700;
             color: #2d3748;
-            white-space: nowrap;
-            display: inline-block;
-            padding-right: 20px;
-        }
-
-        /* marquee-active: Chạy đúng 1 lần (1), giữ nguyên vị trí cuối khi xong (forwards) */
-        .marquee-active {
-            animation: marqueeOnceEffect 4s cubic-bezier(0.25, 1, 0.5, 1) 0.5s 1 forwards;
-        }
-
-        @keyframes marqueeOnceEffect {
-            0% { 
-                transform: translateX(0); 
-            }
-            100% { 
-                /* Chạy từ phải qua trái dịch chuyển vừa khít phần bị khuất */
-                transform: translate3d(calc(-100% + 100cqw), 0, 0); 
-            }
         }
 
         .day-card.weekend {
@@ -602,24 +576,10 @@
                 </div>
                 <div class="duty-info">
                     <div class="duty-label">${isWeekend ? 'Trực Cuối Tuần (Đầu Ngày)' : 'Trực Trong Tuần (Sáng & Chiều)'}</div>
-                    <div class="marquee-box">
-                        <div class="duty-name" id="name-${offset}">${person}</div>
-                    </div>
+                    <div class="duty-name">${person}</div>
                 </div>
             `;
                 container.appendChild(card);
-
-                // Kiểm tra kích thước ô để bật hiệu ứng trượt 1 lần nếu chuỗi bị tràn
-                setTimeout(() => {
-                    const nameEl = document.getElementById(`name-${offset}`);
-                    if (nameEl) {
-                        const containerWidth = nameEl.parentElement.offsetWidth;
-                        nameEl.style.containerType = 'inline-size';
-                        if (nameEl.scrollWidth > containerWidth) {
-                            nameEl.classList.add('marquee-active');
-                        }
-                    }
-                }, 50);
             });
         }
 

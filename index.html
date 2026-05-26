@@ -31,6 +31,7 @@
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             margin: 0 auto;
+            box-sizing: border-box;
         }
 
         h1 {
@@ -67,6 +68,7 @@
             border-radius: 6px;
             transition: all 0.2s;
             font-size: 13px;
+            white-space: nowrap;
         }
 
         .tab-link.active {
@@ -88,6 +90,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 25px;
+            gap: 8px;
         }
 
         .nav-btn {
@@ -99,6 +102,9 @@
             font-weight: 600;
             color: #4a5568;
             transition: all 0.2s;
+            font-size: 13px;
+            flex: 1;
+            text-align: center;
         }
 
         .nav-btn:hover {
@@ -120,6 +126,7 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             background: #fff;
+            box-sizing: border-box;
         }
 
         .day-info {
@@ -218,6 +225,7 @@
         td {
             padding: 12px;
             border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
         }
 
         th {
@@ -245,6 +253,73 @@
             color: #a0aec0;
             font-style: italic;
         }
+
+        /* --- CẤU HÌNH RESPONSIVE TRÊN ĐIỆN THOẠI (MÀN HÌNH < 600px) --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px 8px;
+            }
+
+            .container {
+                padding: 15px 10px;
+                border-radius: 12px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .tab-link {
+                font-size: 11px;
+                padding: 8px 2px;
+            }
+
+            .nav-btn {
+                font-size: 11px;
+                padding: 8px 6px;
+            }
+
+            /* Chuyển Day-card 3 ngày thành 1 cột dọc hẳn */
+            .day-card {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .duty-info {
+                padding-left: 0;
+                padding-top: 10px;
+                border-left: none;
+                border-top: 2px solid #edf2f7;
+            }
+
+            .day-card.weekend .duty-info {
+                border-top-color: #fef3c7;
+            }
+
+            .day-card.today {
+                transform: none;
+                /* Tránh scale bị lẹm viền trên màn hình nhỏ */
+                margin: 5px 0;
+            }
+
+            .day-card.today::after {
+                right: 15px;
+                top: -10px;
+                font-size: 9px;
+            }
+
+            .duty-name {
+                font-size: 16px;
+            }
+
+            /* Tối ưu bảng lịch dài */
+            th,
+            td {
+                padding: 10px 4px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
@@ -256,16 +331,16 @@
 
         <div class="tabs-menu">
             <div class="tab-link active" onclick="switchTab(event, 'focus-sheet')">🎯 Hôm Nay</div>
-            <div class="tab-link" onclick="switchTab(event, 'weekday-sheet')">📜 Lịch Thứ 2 - Thứ 6</div>
-            <div class="tab-link" onclick="switchTab(event, 'weekend-sheet')">🏖️ Lịch Cuối Tuần</div>
+            <div class="tab-link" onclick="switchTab(event, 'weekday-sheet')">📜 Thứ 2 - 6</div>
+            <div class="tab-link" onclick="switchTab(event, 'weekend-sheet')">🏖️ Cuối Tuần</div>
         </div>
 
         <div id="focus-sheet" class="tab-content active">
             <div class="navigation-box">
-                <button class="nav-btn" onclick="changeCenterDate(-1)">◀ Ngày trước đó</button>
-                <button class="nav-btn" style="background: #ebf8ff; color: #2b6cb0;" onclick="resetToToday()">Về Hiện
-                    Tại</button>
-                <button class="nav-btn" onclick="changeCenterDate(1)">Ngày tiếp theo ▶</button>
+                <button class="nav-btn" onclick="changeCenterDate(-1)">◀ Ngày trước</button>
+                <button class="nav-btn" style="background: #ebf8ff; color: #2b6cb0;" onclick="resetToToday()">Hiện
+                    tại</button>
+                <button class="nav-btn" onclick="changeCenterDate(1)">Ngày sau ▶</button>
             </div>
             <div class="timeline" id="timelineContainer"></div>
         </div>
@@ -275,14 +350,14 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày dương lịch</th>
+                            <th>Ngày dương</th>
                             <th>Thứ</th>
                             <th>Người trực (Cả Ngày)</th>
                         </tr>
                     </thead>
                     <tbody id="weekdayTableBody"></tbody>
                 </table>
-                <div class="loading-text">Cuộn xuống để xem tiếp các tuần sau...</div>
+                <div class="loading-text">Cuộn xuống để xem tiếp...</div>
             </div>
         </div>
 
@@ -291,14 +366,14 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Ngày dương lịch</th>
+                            <th>Ngày dương</th>
                             <th>Thứ</th>
                             <th>Người trực (Đầu Ngày)</th>
                         </tr>
                     </thead>
                     <tbody id="weekendTableBody"></tbody>
                 </table>
-                <div class="loading-text">Cuộn xuống để xem tiếp các tuần sau...</div>
+                <div class="loading-text">Cuộn xuống để xem tiếp...</div>
             </div>
         </div>
     </div>
@@ -401,8 +476,6 @@
                 if (offset === 0 && d.toDateString() === realTodayStr) card.classList.add('today');
 
                 let relativeLabel = "";
-                //if (offset === -1) relativeLabel = " (Hôm qua)";
-                //if (offset === 1) relativeLabel = " (Ngày mai)";
 
                 card.innerHTML = `
                 <div class="day-info">

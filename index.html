@@ -37,18 +37,11 @@
         h1 {
             text-align: center;
             color: #1a202c;
-            margin-bottom: 5px;
+            margin-bottom: 25px;
             font-size: 24px;
         }
 
-        .sub-title {
-            text-align: center;
-            color: #718096;
-            margin-bottom: 25px;
-            font-size: 14px;
-        }
-
-        /* Menu di chuyển giữa các Sheet */
+        /* Menu điều hướng Tab */
         .tabs-menu {
             display: flex;
             background: #edf2f7;
@@ -85,12 +78,9 @@
             display: block;
         }
 
-        /* --- SHEET 1: FOCUS 3 NGÀY --- */
+        /* --- TAB 1: HÔM NAY --- */
         .navigation-box {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            gap: 8px;
+            display: none; 
         }
 
         .nav-btn {
@@ -160,6 +150,13 @@
             font-size: 18px;
             font-weight: 700;
             color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .is-swapped {
+            color: #e53e3e !important;
         }
 
         .day-card.weekend {
@@ -175,7 +172,6 @@
             border-left-color: #fef3c7;
         }
 
-        /* --- TAB 1: ĐỒNG BỘ ĐỀU NHAU, KHÔNG PHÓNG TO, KHÔNG TĂNG CỠ CHỮ --- */
         .day-card.today {
             background: #ffffff;
             border: 3px solid var(--focus-color);
@@ -201,7 +197,105 @@
             color: var(--focus-color);
         }
 
-        /* --- TỐI ƯU HIỂN THỊ VỪA KHÍT 7 DÒNG --- */
+        /* --- TAB 4: FORM HOÁN ĐỔI LỊCH (UI HÀNG DỌC TINH GỌN) --- */
+        .swap-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            background-color: #ffffff;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
+            
+            /* Chống highlight văn bản và ẩn con trỏ nhấp nháy */
+            user-select: none;
+            -webkit-user-select: none;
+            caret-color: transparent;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+
+        /* Định dạng lại giao diện các ngày bị vô hiệu hóa (quá khứ) nếu trình duyệt hỗ trợ */
+        .form-group input::-webkit-calendar-picker-indicator:disabled {
+            opacity: 0.4;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background 0.2s;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #004085;
+        }
+
+        /* POPUP THÔNG BÁO NHANH (TOAST) */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #2e3033;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Cấu trúc bảng */
         .table-container {
             height: 344px;
             overflow-y: auto;
@@ -216,8 +310,7 @@
             table-layout: fixed;
         }
 
-        th,
-        td {
+        th, td {
             padding: 12px 16px;
             line-height: 19px;
             border-bottom: 1px solid var(--border-color);
@@ -228,20 +321,9 @@
             white-space: nowrap;
         }
 
-        th:nth-child(1),
-        td:nth-child(1) {
-            width: 25%;
-        }
-
-        th:nth-child(2),
-        td:nth-child(2) {
-            width: 20%;
-        }
-
-        th:nth-child(3),
-        td:nth-child(3) {
-            width: 55%;
-        }
+        th:nth-child(1), td:nth-child(1) { width: 25%; }
+        th:nth-child(2), td:nth-child(2) { width: 20%; }
+        th:nth-child(3), td:nth-child(3) { width: 55%; }
 
         th {
             background: var(--primary);
@@ -251,144 +333,40 @@
             z-index: 5;
         }
 
-        tr.table-weekend {
-            background-color: #fffdf5;
-            color: var(--weekend-color);
-        }
-
-        /* --- TAB 2 & 3: DÒNG HÔM NAY CHỮ THƯỜNG (KHÔNG BOLD), NỀN XANH NHẸ ĐỒNG ĐỀU --- */
-        tr.table-today {
-            background-color: #e8fbf0 !important;
-            font-weight: normal !important; 
-        }
+        tr.table-weekend { background-color: #fffdf5; color: var(--weekend-color); }
+        tr.table-today { background-color: #e8fbf0 !important; }
         
-        tr.table-today td strong {
-            font-weight: normal !important;
+        td div.cell-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .loading-text {
-            text-align: center;
-            padding: 15px;
-            font-size: 13px;
-            color: #a0aec0;
-            font-style: italic;
+        .inline-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #cbd5e1;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: inline-block;
         }
 
-        /* --- CẤU HÌNH RESPONSIVE TRÊN ĐIỆN THOẠI (MÀN HÌNH < 600px) --- */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 600px) {
-            body {
-                padding: 10px 8px;
-            }
-
-            .container {
-                padding: 15px 10px;
-                border-radius: 12px;
-            }
-
-            h1 {
-                font-size: 20px;
-                margin-bottom: 2px;
-            }
-
-            .sub-title {
-                margin-bottom: 15px;
-            }
-
-            .tabs-menu {
-                margin-bottom: 15px;
-            }
-
-            .tab-link {
-                font-size: 11px;
-                padding: 8px 2px;
-            }
-
-            .navigation-box {
-                margin-bottom: 15px;
-                gap: 5px;
-            }
-
-            .nav-btn {
-                font-size: 11px;
-                padding: 6px 4px;
-            }
-
-            .timeline {
-                gap: 8px;
-            }
-
-            .day-card {
-                grid-template-columns: 85px 1fr;
-                gap: 10px;
-                padding: 10px 12px;
-            }
-
-            .day-info {
-                font-size: 13px;
-            }
-
-            .day-info span {
-                font-size: 11px;
-                margin-top: 2px;
-            }
-
-            .duty-info {
-                padding-left: 10px;
-                padding-top: 0;
-                border-left: 2px solid #edf2f7;
-                border-top: none;
-            }
-
-            .day-card.weekend .duty-info {
-                border-left-color: #fef3c7;
-            }
-
-            .duty-label {
-                font-size: 9px;
-                margin-bottom: 1px;
-            }
-
-            .duty-name {
-                font-size: 14px;
-            }
-
-            .day-card.today {
-                margin: 0;
-                border-width: 2px;
-            }
-
-            .day-card.today::after {
-                right: 10px;
-                top: -8px;
-                font-size: 8px;
-                padding: 1px 6px;
-            }
-
-            th,
-            td {
-                padding: 10px 6px;
-                line-height: 17px;
-                font-size: 12px;
-            }
-
-            th:nth-child(1),
-            td:nth-child(1) {
-                width: 28%;
-            }
-
-            th:nth-child(2),
-            td:nth-child(2) {
-                width: 22%;
-            }
-
-            th:nth-child(3),
-            td:nth-child(3) {
-                width: 50%;
-            }
-
-            .table-container {
-                height: 304px;
-            }
+            body { padding: 10px 8px; }
+            .container { padding: 15px 10px; border-radius: 12px; }
+            h1 { font-size: 20px; margin-bottom: 15px; }
+            .tab-link { font-size: 11px; padding: 8px 2px; }
+            .day-card { grid-template-columns: 85px 1fr; gap: 10px; padding: 10px 12px; }
+            .day-info { font-size: 13px; }
+            .duty-name { font-size: 14px; }
+            th, td { padding: 10px 6px; font-size: 12px; }
+            .table-container { height: 304px; }
+            .swap-form { padding: 16px; }
         }
     </style>
 </head>
@@ -397,12 +375,12 @@
 
     <div class="container">
         <h1>📋 Lịch trực</h1>
-        <div class="sub-title"></div>
 
         <div class="tabs-menu">
             <div class="tab-link active" onclick="switchTab(event, 'focus-sheet')">🎯 Hôm Nay</div>
             <div class="tab-link" onclick="switchTab(event, 'weekday-sheet')">📜 Thứ 2 - 6</div>
             <div class="tab-link" onclick="switchTab(event, 'weekend-sheet')">🏖️ Cuối Tuần</div>
+            <div class="tab-link" onclick="switchTab(event, 'swap-sheet')">🔄 Đổi Ngày Trực</div>
         </div>
 
         <div id="focus-sheet" class="tab-content active">
@@ -426,7 +404,6 @@
                     </thead>
                     <tbody id="weekdayTableBody"></tbody>
                 </table>
-                <div class="loading-text">Cuộn xuống để xem tiếp...</div>
             </div>
         </div>
 
@@ -442,116 +419,208 @@
                     </thead>
                     <tbody id="weekendTableBody"></tbody>
                 </table>
-                <div class="loading-text">Cuộn xuống để xem tiếp...</div>
             </div>
+        </div>
+
+        <div id="swap-sheet" class="tab-content">
+            <form class="swap-form" onsubmit="executeSwap(event)">
+                <div class="form-group">
+                    <label for="dateGoc">📅 Ngày cần đổi:</label>
+                    <input type="date" id="dateGoc" onclick="this.showPicker()" onkeydown="return false" onselect="this.selectionStart = this.selectionEnd;" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateDoi">📅 Ngày muốn đổi:</label>
+                    <input type="date" id="dateDoi" onclick="this.showPicker()" onkeydown="return false" onselect="this.selectionStart = this.selectionEnd;" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">Đổi</button>
+            </form>
         </div>
     </div>
 
-    <script>
-        // Danh sách 10 thành viên xoay tua chính
-        const members = [
-            "Võ Nguyễn Thanh Tú",
-            "Trương Vĩnh Thuận",
-            "Tăng Hồng Vủ Bảo",
-            "Phạm Việt Huy - Bích Vân",
-            "Nguyễn Lê Thái Hiền",
-            "Trần Trung Bắc",
-            "Nguyễn Văn Huy",
-            "Phạm Huy Hùng",
-            "Nguyễn Phúc Khang",
-            "Nguyễn Dương Chí Tâm"
-        ];
+    <div id="toastNotification" class="toast-notification">✅ Đã đổi ngày trực!</div>
 
-        // Chia 2 tốp chạy từ Thứ 2 đến Thứ 6 xen kẽ nhau từng tuần
+    <script>
+        const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbzEUdmmDtBwRXqLQ6PnP5vTqoPU6hKCf6yvX4lXb-rwGcV5SQaKsLC866A1Yxp2ukha/exec";
+
+        const members = ["Võ Nguyễn Thanh Tú", "Trương Vĩnh Thuận", "Tăng Hồng Vủ Bảo", "Phạm Việt Huy - Bích Vân", "Nguyễn Lê Thái Hiền", "Trần Trung Bắc", "Nguyễn Văn Huy", "Phạm Huy Hùng", "Nguyễn Phúc Khang", "Nguyễn Dương Chí Tâm"];
         const team1 = ["Võ Nguyễn Thanh Tú", "Trương Vĩnh Thuận", "Tăng Hồng Vủ Bảo", "Phạm Việt Huy - Bích Vân", "Nguyễn Lê Thái Hiền"];
         const team2 = ["Trần Trung Bắc", "Nguyễn Văn Huy", "Phạm Huy Hùng", "Nguyễn Phúc Khang", "Nguyễn Dương Chí Tâm"];
-
-        // Ngày gốc cố định thuật toán: 25/05/2026 (Thứ Hai) - Quy ước là Tuần của Tốp 1
         const BASE_DATE = new Date(2026, 4, 25);
-        let centerDate = new Date();
 
+        let swapHistory = []; 
+        let isFetching = true; 
+        let centerDate = new Date();
         const daysOfWeek = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
         const realTodayStr = new Date().toDateString();
 
-        // Hàm phụ trợ: Lấy ngày Thứ Hai đầu tuần của một ngày bất kỳ
         function getStartOfWeek(date) {
             let d = new Date(date);
             let day = d.getDay();
-            let diff = d.getDate() - day + (day === 0 ? -6 : 1); // Điều chỉnh nếu là CN
+            let diff = d.getDate() - day + (day === 0 ? -6 : 1);
             return new Date(d.setDate(diff));
         }
 
-        // Khởi tạo ngày cho 2 bảng bắt đầu chính xác từ Thứ Hai của tuần hiện tại
         let weekdayCurrentDate = getStartOfWeek(new Date());
         let weekendCurrentDate = getStartOfWeek(new Date());
 
-        // THUẬT TOÁN LÕI TÍNH LỊCH TRỰC CHÍNH XÁC
-        function getDutyForDate(targetDate) {
+        function showToast() {
+            const toast = document.getElementById('toastNotification');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Hàm đặt giới hạn ngày nhỏ nhất (min) trên giao diện chọn lịch
+        function setupMinDateRestrictions() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const minDateString = `${year}-${month}-${day}`;
+            
+            document.getElementById('dateGoc').min = minDateString;
+            document.getElementById('dateDoi').min = minDateString;
+        }
+
+        function initApp() {
+            setupMinDateRestrictions(); // Kích hoạt giới hạn ngày trên UI
+            isFetching = true; 
+            renderAll(); 
+
+            fetch(GOOGLE_SHEET_API)
+                .then(response => response.json())
+                .then(data => {
+                    isFetching = false; 
+                    if (data && data.length > 0) {
+                        swapHistory = data;
+                    }
+                    resetRenderPointers();
+                    renderAll();
+                })
+                .catch(error => {
+                    console.error("Lỗi kết nối API:", error);
+                    isFetching = false; 
+                    resetRenderPointers();
+                    renderAll();
+                });
+        }
+
+        function resetRenderPointers() {
+            document.getElementById('weekdayTableBody').innerHTML = '';
+            document.getElementById('weekendTableBody').innerHTML = '';
+            weekdayCurrentDate = getStartOfWeek(new Date());
+            weekendCurrentDate = getStartOfWeek(new Date());
+        }
+
+        function getRawDutyForDate(targetDate) {
             const startOfBaseWeek = getStartOfWeek(BASE_DATE);
             const startOfTargetWeek = getStartOfWeek(targetDate);
             const diffWeeks = Math.round((startOfTargetWeek - startOfBaseWeek) / (1000 * 60 * 60 * 24 * 7));
-            
             if (diffWeeks < 0) return "Chưa có thông tin";
 
             let wDay = targetDate.getDay();
-
-            // --- TRƯỜNG HỢP TRONG TUẦN (THỨ 2 - THỨ 6) ---
             if (wDay !== 0 && wDay !== 6) {
                 let currentTeam = (diffWeeks % 2 === 0) ? team1 : team2;
-                let memberIndex = wDay - 1; 
-                return currentTeam[memberIndex];
+                return currentTeam[wDay - 1];
             }
 
-            // --- TRƯỜNG HỢP CUỐI TUẦN (THỨ 7 & CHỦ NHẬT) ---
             let totalWeekendDaysCount = 0;
             let currentLoopDate = new Date(startOfBaseWeek);
-            
             while (currentLoopDate <= targetDate) {
                 let loopDay = currentLoopDate.getDay();
                 if (loopDay === 0 || loopDay === 6) {
-                    
                     if (currentLoopDate.toDateString() === targetDate.toDateString()) {
-                        // 1. Nếu là Thứ 7
                         if (loopDay === 6) {
                             let thursDate = new Date(currentLoopDate);
                             thursDate.setDate(currentLoopDate.getDate() - 2);
-                            let thursPerson = getDutyForDate(thursDate);
-
-                            if (thursPerson && thursPerson.includes("Phạm Việt Huy")) {
-                                return "Bích Vân";
-                            }
+                            let thursPerson = getRawDutyForDate(thursDate);
+                            if (thursPerson && thursPerson.includes("Phạm Việt Huy")) return "Bích Vân";
                         }
-                        
-                        // Lấy người trực từ danh sách xoay tua 10 người
                         let assignedPerson = members[totalWeekendDaysCount % members.length];
-                        
-                        // Nếu là Chủ Nhật và trúng cặp Huy - Vân thì chỉ hiện Phạm Việt Huy
-                        if (loopDay === 0 && assignedPerson === "Phạm Việt Huy - Bích Vân") {
-                            return "Phạm Việt Huy";
-                        }
-                        
+                        if (loopDay === 0 && assignedPerson === "Phạm Việt Huy - Bích Vân") return "Phạm Việt Huy";
                         return assignedPerson;
                     }
-
                     if (loopDay === 6) {
                         let thursDate = new Date(currentLoopDate);
                         thursDate.setDate(currentLoopDate.getDate() - 2);
-                        let thursPerson = getDutyForDate(thursDate);
-                        
-                        if (!(thursPerson && thursPerson.includes("Phạm Việt Huy"))) {
-                            totalWeekendDaysCount++;
-                        }
+                        let thursPerson = getRawDutyForDate(thursDate);
+                        if (!(thursPerson && thursPerson.includes("Phạm Việt Huy"))) totalWeekendDaysCount++;
                     } else {
                         totalWeekendDaysCount++;
                     }
                 }
                 currentLoopDate.setDate(currentLoopDate.getDate() + 1);
             }
-
             return "Chưa có thông tin";
         }
 
-        // --- RENDER SHEET 1: FOCUS 3 NGÀY ---
+        function getDutyForDate(targetDate) {
+            let currentKey = targetDate.toLocaleDateString('vi-VN');
+
+            for (let i = 0; i < swapHistory.length; i++) {
+                if (swapHistory[i].ngay_goc === currentKey) {
+                    currentKey = swapHistory[i].ngay_doi;
+                } else if (swapHistory[i].ngay_doi === currentKey) {
+                    currentKey = swapHistory[i].ngay_goc;
+                }
+            }
+            const parts = currentKey.split("/");
+            const finalDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            const swappedName = getRawDutyForDate(finalDate);
+
+            const originalName = getRawDutyForDate(targetDate);
+            const isReallySwapped = (swappedName !== originalName);
+
+            return { name: swappedName, swapped: isReallySwapped };
+        }
+
+        function executeSwap(e) {
+            e.preventDefault();
+            const inputGoc = document.getElementById('dateGoc').value;
+            const inputDoi = document.getElementById('dateDoi').value;
+
+            if (!inputGoc || !inputDoi) return;
+            
+            // Thông báo nếu người dùng cố tình nhập 2 ngày trùng nhau
+            if (inputGoc === inputDoi) { 
+                alert("Vui lòng chọn 2 ngày khác nhau!"); 
+                return; 
+            }
+
+            const dGoc = new Date(inputGoc);
+            const dDoi = new Date(inputDoi);
+            const strGoc = dGoc.toLocaleDateString('vi-VN');
+            const strDoi = dDoi.toLocaleDateString('vi-VN');
+
+            swapHistory.push({ ngay_goc: strGoc, ngay_doi: strDoi });
+            
+            resetRenderPointers();
+            renderAll();
+
+            showToast();
+
+            document.getElementById('dateGoc').value = '';
+            document.getElementById('dateDoi').value = '';
+
+            document.querySelectorAll('.tab-link')[0].click();
+
+            fetch(GOOGLE_SHEET_API, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ngay_goc: strGoc, ngay_doi: strDoi })
+            }).catch(err => console.error("Lỗi đẩy dữ liệu nền:", err));
+        }
+
+        function renderAll() {
+            renderThreeDays();
+            renderWeekdaySheet(40);
+            renderWeekendSheet(16);
+        }
+
         function renderThreeDays() {
             const container = document.getElementById('timelineContainer');
             container.innerHTML = '';
@@ -561,7 +630,7 @@
                 let d = new Date(centerDate);
                 d.setDate(centerDate.getDate() + offset);
 
-                const person = getDutyForDate(d);
+                const duty = getDutyForDate(d);
                 const isWeekend = (d.getDay() === 0 || d.getDay() === 6);
 
                 const card = document.createElement('div');
@@ -569,21 +638,25 @@
                 if (isWeekend) card.classList.add('weekend');
                 if (offset === 0 && d.toDateString() === realTodayStr) card.classList.add('today');
 
+                let loadingIconHTML = isFetching ? '<span class="inline-spinner"></span>' : '';
+                let swappedIconHTML = (!isFetching && duty.swapped) ? '🔄' : '';
+
                 card.innerHTML = `
                 <div class="day-info">
                     ${daysOfWeek[d.getDay()]}
                     <span>${d.toLocaleDateString('vi-VN')}</span>
                 </div>
                 <div class="duty-info">
-                    <div class="duty-label">${isWeekend ? 'Trực Cuối Tuần (Đầu Ngày)' : 'Trực Trong Tuần (Sáng & Chiều)'}</div>
-                    <div class="duty-name">${person}</div>
+                    <div class="duty-label">${isWeekend ? 'Trực Cuối Tuần' : 'Trực Trong Tuần'}</div>
+                    <div class="duty-name ${(!isFetching && duty.swapped) ? 'is-swapped' : ''}">
+                        ${duty.name} ${swappedIconHTML} ${loadingIconHTML}
+                    </div>
                 </div>
             `;
                 container.appendChild(card);
             });
         }
 
-        // --- RENDER SHEET 2: FULL LỊCH THỨ 2 - THỨ 6 ---
         function renderWeekdaySheet(daysToGenerate) {
             const tbody = document.getElementById('weekdayTableBody');
             let generatedCount = 0;
@@ -593,14 +666,21 @@
                 let wDay = loopDate.getDay();
 
                 if (wDay !== 0 && wDay !== 6) {
-                    const person = getDutyForDate(loopDate);
+                    const duty = getDutyForDate(loopDate);
                     const row = document.createElement('tr');
                     if (loopDate.toDateString() === realTodayStr) row.className = 'table-today';
+
+                    let loadingIconHTML = isFetching ? '<span class="inline-spinner"></span>' : '';
+                    let swappedIconHTML = (!isFetching && duty.swapped) ? '🔄' : '';
 
                     row.innerHTML = `
                     <td>${loopDate.toLocaleDateString('vi-VN')}</td>
                     <td>${daysOfWeek[wDay]}</td>
-                    <td>${person}</td>
+                    <td>
+                        <div class="cell-name ${(!isFetching && duty.swapped) ? 'is-swapped' : ''}">
+                            ${duty.name} ${swappedIconHTML} ${loadingIconHTML}
+                        </div>
+                    </td>
                 `;
                     tbody.appendChild(row);
                     generatedCount++;
@@ -609,7 +689,6 @@
             }
         }
 
-        // --- RENDER SHEET 3: FULL LỊCH CUỐI TUẦN ---
         function renderWeekendSheet(daysToGenerate) {
             const weekendTbody = document.getElementById('weekendTableBody');
             let generatedCount = 0;
@@ -619,15 +698,22 @@
                 let wDay = loopDate.getDay();
 
                 if (wDay === 0 || wDay === 6) {
-                    const person = getDutyForDate(loopDate);
+                    const duty = getDutyForDate(loopDate);
                     const row = document.createElement('tr');
                     row.className = 'table-weekend';
                     if (loopDate.toDateString() === realTodayStr) row.className = 'table-today';
 
+                    let loadingIconHTML = isFetching ? '<span class="inline-spinner"></span>' : '';
+                    let swappedIconHTML = (!isFetching && duty.swapped) ? '🔄' : '';
+
                     row.innerHTML = `
                     <td>${loopDate.toLocaleDateString('vi-VN')}</td>
                     <td>${daysOfWeek[wDay]}</td>
-                    <td>${person}</td>
+                    <td>
+                        <div class="cell-name ${(!isFetching && duty.swapped) ? 'is-swapped' : ''}">
+                            ${duty.name} ${swappedIconHTML} ${loadingIconHTML}
+                        </div>
+                    </td>
                 `;
                     weekendTbody.appendChild(row);
                     generatedCount++;
@@ -636,20 +722,16 @@
             }
         }
 
-        // Hàm chuyển đổi tab
         function switchTab(event, tabId) {
             document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-
             event.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
         }
 
-        // Điều hướng nhanh cho Sheet 1
         function changeCenterDate(days) { centerDate.setDate(centerDate.getDate() + days); renderThreeDays(); }
         function resetToToday() { centerDate = new Date(); renderThreeDays(); }
 
-        // Xử lý cuộn vô hạn cho Sheet Thứ 2 - Thứ 6
         const weekdayContainer = document.getElementById('weekdayTableContainer');
         weekdayContainer.addEventListener('scroll', () => {
             if (weekdayContainer.scrollTop + weekdayContainer.clientHeight >= weekdayContainer.scrollHeight - 50) {
@@ -657,7 +739,6 @@
             }
         });
 
-        // Xử lý cuộn vô hạn cho Sheet Cuối Tuần
         const weekendContainer = document.getElementById('weekendTableContainer');
         weekendContainer.addEventListener('scroll', () => {
             if (weekendContainer.scrollTop + weekendContainer.clientHeight >= weekendContainer.scrollHeight - 50) {
@@ -665,12 +746,7 @@
             }
         });
 
-        // Khởi tạo nạp dữ liệu ban đầu
-        renderThreeDays();
-        renderWeekdaySheet(40);
-        renderWeekendSheet(16); 
+        initApp();
     </script>
-
 </body>
-
 </html>
